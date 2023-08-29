@@ -6,6 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 
 import ch.zli.m223.model.Entry;
 
@@ -18,6 +19,18 @@ public class EntryService {
     public Entry createEntry(Entry entry) {
         entityManager.persist(entry);
         return entry;
+    }
+
+    public Entry findEntryById(Long id) {
+        return entityManager.find(Entry.class, id);
+    }
+
+    @Transactional
+    public void deleteEntry(Long id) {
+        var entry = findEntryById(id);
+        if (entry == null)
+            throw new NotFoundException("id not found");
+        entityManager.remove(entry);
     }
 
     public List<Entry> findAll() {
