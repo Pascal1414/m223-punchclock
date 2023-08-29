@@ -33,6 +33,12 @@ public class EntryService {
         entityManager.remove(entry);
     }
 
+    @Transactional
+    public Entry updateEntry(Long id, Entry entry) {
+        entry.setId(id);
+        return entityManager.merge(entry);
+    }
+
     public List<Entry> findAll() {
         var query = entityManager.createQuery("FROM Entry", Entry.class);
         return query.getResultList();
