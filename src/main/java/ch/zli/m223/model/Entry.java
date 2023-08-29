@@ -19,6 +19,13 @@ public class Entry {
   @Column(nullable = false)
   private LocalDateTime checkOut;
 
+  public boolean isValid() {
+    if (checkIn.isAfter(checkOut))
+      return false;
+    else
+      return true;
+  }
+
   public Long getId() {
     return id;
   }

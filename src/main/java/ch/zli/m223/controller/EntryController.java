@@ -39,8 +39,11 @@ public class EntryController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Creates a new entry.", description = "Creates a new entry and returns the newly added entry.")
-    public Entry create(Entry entry) {
-        return entryService.createEntry(entry);
+    public Response create(Entry entry) {
+        if (!entry.isValid())
+            return Response.status(422).build();
+
+        return Response.ok(entryService.createEntry(entry)).build();
     }
 
     @DELETE
@@ -57,6 +60,9 @@ public class EntryController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, Entry entry) {
+        if (!entry.isValid())
+            return Response.status(422).build();
+
         var updatedEntry = entryService.updateEntry(id, entry);
         return Response.ok(updatedEntry).build();
     }
